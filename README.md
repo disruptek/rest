@@ -7,6 +7,8 @@ it -- it rarely is.
 
 I don't really want to document this garbage, but I guess I will.
 
+## Usage
+
 ```nim
 import rest
 
@@ -61,3 +63,9 @@ block:
     reply = waitfor request.retry()
   echo waitfor reply.body
 ```
+
+## Documentation
+See [the documentation for the rest module](https://disruptek.github.io/rest/rest.html) as generated directly from the source.
+
+## License
+MIT
