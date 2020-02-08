@@ -41,7 +41,7 @@ block:
     # retry up to 5 times waiting 1000ms the first
     # time and then following fibonnaci backoff
     response = request.retried()
-    echo waitfor reply.body
+  echo waitfor response.body
 
 block:
   var
