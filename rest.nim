@@ -41,6 +41,7 @@ type
     client*: RestClient
     name*: string
     meth*: HttpMethod
+    url*: Uri
 
   FutureQueueFifo* = Deque
   PageFuturesFifo*[T] = Deque[T]
@@ -163,6 +164,11 @@ method newRecallable*(call: RestCall; url: Uri): Recallable
   {.base,raises: [Exception].} =
   ## make a new HTTP request that we can reissue if desired
   result = newRecallable(call, url, newHttpHeaders(), "")
+
+method newRecallable*(call: RestCall): Recallable
+  {.base,raises: [Exception].} =
+  ## make a new HTTP request that we can reissue if desired
+  result = newRecallable(call, call.url)
 
 # a hack to work around nim 0.20 -> 1.0 interface change
 template isEmptyAnyVersion(h: HttpHeaders): bool =
