@@ -1,4 +1,4 @@
-version = "1.0.4"
+version = "1.0.5"
 author = "disruptek"
 description = "rest comfort"
 license = "MIT"

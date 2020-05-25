@@ -109,7 +109,7 @@ proc newRestClient*(): RestClient =
 
 method newRecallable*(call: RestCall; url: Uri; headers: HttpHeaders;
                       body: string): Recallable
-  {.base,raises: [Exception].} =
+  {.base, raises: [Exception].} =
   ## make a new HTTP request that we can reissue if desired
   new result
   result.url = $url
@@ -129,20 +129,20 @@ method newRecallable*(call: RestCall; url: Uri; headers: HttpHeaders;
 
 method newRecallable*(call: RestCall; url: string; headers: HttpHeaders;
                       body: string): Recallable
-  {.base,raises: [Exception].} =
+  {.base, raises: [Exception].} =
   ## make a new HTTP request that we can reissue if desired
   result = newRecallable(call, url.parseUri, headers, body)
 
 method newRecallable*(call: RestCall; url: Uri; headers: openArray[KeyVal];
                       body: string): Recallable
-  {.base,raises: [Exception].} =
+  {.base, raises: [Exception].} =
   ## make a new HTTP request that we can reissue if desired
   let heads = newHttpHeaders(headers)
   result = newRecallable(call, url, heads, body)
 
 method newRecallable*(call: RestCall; url: Uri; headers: JsonNode;
                       body: JsonNode): Recallable
-  {.base,raises: [Exception].} =
+  {.base, raises: [Exception].} =
   ## make a new HTTP request that we can reissue if desired
   let
     heads = headers.massageHeaders
@@ -153,7 +153,7 @@ method newRecallable*(call: RestCall; url: Uri; headers: JsonNode;
   result = newRecallable(call, url, heads, content)
 
 method newRecallable*(call: RestCall; url: Uri; input: JsonNode): Recallable
-  {.base,raises: [Exception].} =
+  {.base, raises: [Exception].} =
   ## make a new HTTP request that we can reissue if desired
   let
     heads = input.getOrDefault("header")
@@ -161,14 +161,9 @@ method newRecallable*(call: RestCall; url: Uri; input: JsonNode): Recallable
   result = newRecallable(call, url, heads, body)
 
 method newRecallable*(call: RestCall; url: Uri): Recallable
-  {.base,raises: [Exception].} =
+  {.base, raises: [Exception].} =
   ## make a new HTTP request that we can reissue if desired
   result = newRecallable(call, url, newHttpHeaders(), "")
-
-method newRecallable*(call: RestCall): Recallable
-  {.base,raises: [Exception].} =
-  ## make a new HTTP request that we can reissue if desired
-  result = newRecallable(call, call.url)
 
 # a hack to work around nim 0.20 -> 1.0 interface change
 template isEmptyAnyVersion(h: HttpHeaders): bool =
