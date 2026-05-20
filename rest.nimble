@@ -1,9 +1,4 @@
-version = "1.0.5"
+version = "1.0.6"
 author = "disruptek"
 description = "rest comfort"
 license = "MIT"
-requires "nim >= 0.20.0"
-requires "foreach >= 1.0.0"
-
-task test, "Runs the test suite":
-  exec "nim c -r rest.nim"

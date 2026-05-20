@@ -1,17 +1,15 @@
-import os
-import times
-import deques
-import sequtils
-import httpclient
-import httpcore
-import asyncdispatch
-import json
-import xmltree
-import logging
-import strutils
-import uri
-
-import foreach
+import std/os
+import std/times
+import std/deques
+import std/sequtils
+import std/httpclient
+import std/httpcore
+import std/asyncdispatch
+import std/json
+import std/xmltree
+import std/logging
+import std/strutils
+import std/uri
 
 export httpcore.HttpMethod, is2xx, is3xx, is4xx, is5xx
 
@@ -68,7 +66,7 @@ type
 proc massageHeaders*(node: JsonNode): seq[KeyVal] =
   if node == nil or node.kind != JObject or node.len == 0:
     return
-  foreach k, v in node.pairs of string and JsonNode:
+  for k, v in node.pairs:
     assert v.kind == JString
     result.add (key: k, val: v.getStr)
 
@@ -201,7 +199,7 @@ proc retried*(rec: Recallable; tries=5; ms=1000): AsyncResponse
   ## issue the call and return the response synchronously;
   ## raises in the event of a failure
   try:
-    foreach fib in fibonacci(0, tries) of int:
+    for fib in fibonacci(0, tries):
       result = waitfor rec.issueRequest()
       if result.code.is2xx:
         return
@@ -225,7 +223,7 @@ proc retry*(rec: Recallable; tries=5; ms=1000): Future[AsyncResponse]
   ## retry if the status code is 1XX, 3XX, or 5XX.
   var response: AsyncResponse
   try:
-    foreach fib in fibonacci(0, tries) of int:
+    for fib in fibonacci(0, tries):
       response = await rec.issueRequest()
       if response.code.is2xx:
         return response
@@ -250,7 +248,7 @@ iterator retried*(rec: Recallable; tries=5; ms=1000): AsyncResponse
   ## obviously, you can terminate early.
   var response: AsyncResponse
   try:
-    foreach fib in fibonacci(0, tries) of int:
+    for fib in fibonacci(0, tries):
       response = waitfor rec.issueRequest()
       yield response
       if response.code.is4xx:
@@ -336,7 +334,7 @@ iterator ready*[T](futures: var PageFuturesSeq[T]; threads=0): T
 
 
 when isMainModule:
-  import unittest
+  import std/unittest
 
   suite "rest":
     type
@@ -360,7 +358,7 @@ when isMainModule:
 
     test "retried via iteration":
       var text: string
-      foreach response in rec.retried(tries=5) of AsyncResponse:
+      for response in rec.retried(tries=5):
         if not response.code.is2xx:
           warn "retried " & $rec.retries & " took " & $rec.took
           continue
